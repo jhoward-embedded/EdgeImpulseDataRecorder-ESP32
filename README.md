@@ -1,9 +1,104 @@
-# EdgeImpulseDataRecorder-ESP32
+# 🎙️ ESP32 Audio Data Collector
 
-ESP32 Audio Data CollectorA lightweight Python utility to stream, visualize, and record raw 16-bit PCM audio data from an ESP32 via Serial. This tool is designed for developers building machine learning datasets (e.g., for Edge Impulse, TensorFlow Lite Micro, or custom DSP pipelines).🚀 FeaturesLive Debug Mode: Real-time ASCII volume meter to verify microphone wiring and gain levels.Bulk Recording: Streamlined workflow for capturing multiple labeled .wav samples in succession.High-Speed Serial: Uses a 921,600 baud rate to ensure no dropped samples during 16kHz streaming.Auto-Labeling: Automatically timestamps and organizes recordings into a dataset directory.🛠 PrerequisitesHardware RequirementsESP32 (S3, C3, or standard DevKit).I2S Microphone (e.g., INMP441, ICS-43434) or an Analog Mic with an ADC.Micro-USB/USB-C Cable with data transfer capabilities.Software RequirementsPython 3.xPySerial library:Bashpip install pyserial
-ESP32 Firmware: Your ESP32 must be programmed to send raw 16-bit Little Endian PCM data over Serial when it receives the character 's' and ASCII values when it receives 'd'.📂 Project StructurePlaintext.
-├── audio_collector.py     # The main Python script
-├── dataset_recordings/    # Directory where .wav files are saved (auto-created)
-└── README.md              # Project documentation
-🖥 UsageConfigure the Port: Open audio_collector.py and update the PORT variable (e.g., COM5 for Windows or /dev/ttyUSB0 for Linux/Mac).Run the Script:Bashpython audio_collector.py
-Menu Options:Option 1 (Live Debug): Use this first! Speak into the mic to see the hashtag meter move. If it doesn't move, check your I2S wiring.Option 2 (Bulk Recording): * Enter a label (e.g., marvin, background_noise).Press Enter to start a 3-second recording.The file will be saved as label_timestamp_count.wav.Type q to return to the main menu.Option 3 (Exit): Safely closes the Serial connection.🎙 Technical SpecificationsParameterValueSample Rate16,000 HzBit Depth16-bit PCMChannels1 (Mono)EncodingLittle Endian (<h)Baud Rate921,600 bps[!IMPORTANT]Serial Buffer Sync: If the audio sounds "choppy," ensure your ESP32 code is using a large enough DMA buffer and that no other Serial.print statements are firing during the 's' streaming mode.🤝 ContributingFeel free to fork this repository and submit pull requests. Common enhancements include adding support for different sample rates or implementing a GUI with Tkinter or PyQt.
+A high-speed Serial utility for building machine learning audio datasets. This tool allows you to stream raw 16-bit PCM data from an ESP32, visualize signal levels in real-time, and save recordings into labeled `.wav` files.
+
+## 🚀 Features
+
+* **Live Debug Mode:** A real-time ASCII volume meter to verify microphone gain and wiring without saving files.
+* **Bulk Recording:** Optimized workflow for capturing dozens of samples quickly—perfect for "Wake Word" training.
+* **High-Speed Transfer:** Uses **921,600 Baud** to ensure 16kHz audio data is captured without packet loss.
+* **Automatic Organization:** Files are timestamped and sorted by label (e.g., `command_170921400_1.wav`).
+
+---
+
+## 🛠️ Requirements
+
+### Hardware
+
+* **ESP32** (S3, C3, or Standard DevKit).
+* **I2S Microphone** (e.g., INMP441, ICS-43434) or an Analog Mic using the ESP32 ADC.
+* **USB Data Cable** (Ensure it is a data cable, not just a charging cable).
+
+### Software
+
+* **Python 3.7+**
+* **PySerial** library:
+```bash
+pip install pyserial
+
+```
+
+
+
+---
+
+## 📂 Installation & Setup
+
+1. **Clone the Repository:**
+```bash
+git clone https://github.com/yourusername/esp32-audio-collector.git
+cd esp32-audio-collector
+
+```
+
+
+2. **Configure the Script:**
+Open `audio_collector.py` and update the `PORT` variable to match your ESP32:
+```python
+PORT = 'COM5'          # Windows
+# PORT = '/dev/ttyUSB0' # Linux/Mac
+
+```
+
+
+3. **ESP32 Firmware:**
+Ensure your ESP32 is programmed to:
+* Send **raw binary** (2 bytes per sample) when it receives the character `'s'`.
+* Send **ASCII integers** (text lines) when it receives the character `'d'`.
+
+
+
+---
+
+## 📖 How to Use
+
+Run the script:
+
+```bash
+python audio_collector.py
+
+```
+
+### 1. Live Debug Mode
+
+Choose **Option 1** to test your microphone. You will see a level meter like this:
+`[##########                                        ] 4200`
+If the bar doesn't move when you speak, check your I2S clock (BCLK/WS) and Data (SD) wiring.
+
+### 2. Data Collection
+
+Choose **Option 2** to start building your dataset.
+
+1. Enter a label when prompted (e.g., `alexa`, `background`, `noise`).
+2. Press **Enter** to start a 3-second capture.
+3. The script will automatically increment the file count and save it to the `dataset_recordings/` folder.
+4. Type `q` to stop the batch and return to the main menu.
+
+---
+
+## 📉 Technical Specs
+
+| Parameter | Value |
+| --- | --- |
+| **Sample Rate** | 16,000 Hz |
+| **Bit Depth** | 16-bit Signed Integer (PCM) |
+| **Baud Rate** | 921,600 bps |
+| **Format** | Mono .WAV (Little Endian) |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to add features like a Spectrogram preview or automatic silence trimming, please open an issue or a Pull Request.
+
+---
