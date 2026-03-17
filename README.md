@@ -65,7 +65,7 @@ Ensure your ESP32 is programmed to:
 Run the script:
 
 ```bash
-python audio_collector.py
+python audio_recorder.py
 
 ```
 
