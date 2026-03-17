@@ -36,8 +36,8 @@ pip install pyserial
 
 1. **Clone the Repository:**
 ```bash
-git clone https://github.com/yourusername/esp32-audio-collector.git
-cd esp32-audio-collector
+git clone https://github.com/jhoward-embedded/EdgeImpulseDataRecorder-ESP32.git
+cd EdgeImpulseDataRecorder-ESP32
 
 ```
 
